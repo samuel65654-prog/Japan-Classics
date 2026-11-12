@@ -38,6 +38,9 @@ article{min-width:0}
     .hero-img{animation:hz linear both;animation-timeline:scroll(root);animation-range:0 100vh}
   }
 }
+.h1x .l2{-webkit-text-stroke-width:2px}
+@media (max-width:720px){.h1x{font-size:clamp(56px,16vw,100px)!important}.h1x .l2{-webkit-text-stroke-width:1.5px!important}.tag-line{letter-spacing:.18em!important;font-size:16px!important}}
+@media (min-width:1001px){.hero-in{max-width:720px!important}}
 .hero-cta2{transition:background .2s,color .2s}
 .hero-cta2:hover{background:#f3ecdc;color:#1b1d23!important}
 
@@ -168,8 +171,8 @@ a,button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
       <div class="eyebrow" style="display:flex;align-items:center;gap:14px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:14px;letter-spacing:.3em;color:#f3ecdc;text-transform:uppercase">
         <span style="width:40px;height:1px;background:#f3ecdc;flex-shrink:0"></span>Directo de Japón · Colombia y EE.&nbsp;UU.
       </div>
-      <h1 style="margin:0;font-family:'Shippori Mincho',serif;font-weight:800;font-size:clamp(56px,7.4vw,124px);line-height:.96;color:#e9752b;letter-spacing:-.015em">Clásicos<br>de Japón</h1>
-      <span style="font-family:'Yellowtail',cursive;font-size:clamp(36px,3.3vw,56px);line-height:1;color:#a9d4ec">Leyendas que no envejecen</span>
+      <h1 class="h1x" style="margin:0;font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:900;text-transform:uppercase;font-size:clamp(76px,10.6vw,176px);line-height:.84;letter-spacing:-.01em;color:#e9752b"><span class="l1" style="display:block;text-shadow:0 0 60px rgba(233,117,43,.35)">Clásicos</span><span class="l2" style="display:block;color:transparent;-webkit-text-stroke:2px #f3ecdc">de Japón</span></h1>
+      <span class="tag-line" style="display:flex;align-items:center;gap:14px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:clamp(18px,1.7vw,26px);letter-spacing:.34em;text-transform:uppercase;color:#a9d4ec"><span style="width:48px;height:2px;background:#e9752b;flex-shrink:0"></span>Leyendas que no envejecen</span>
       <div class="cta-row" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:8px">
         <a href="#catalogo" style="background:#e9752b;color:#1b1d23;padding:16px 30px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-style:italic;font-size:20px;letter-spacing:.06em;text-transform:uppercase" style-hover="background:#f3ecdc;color:#1b1d23">Ver el catálogo</a>
         <a class="hero-cta2" href="#encargo" style="padding:15px 26px;border:1px solid rgba(243,236,220,.7);color:#f3ecdc;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:18px;letter-spacing:.1em;text-transform:uppercase">Encargar uno a medida →</a>
