@@ -24,6 +24,23 @@ img{max-width:100%}
 section[id]{scroll-margin-top:84px}
 image-slot{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;aspect-ratio:auto!important}
 article{min-width:0}
+.hero-img{will-change:transform}
+@media (prefers-reduced-motion:no-preference){
+  @keyframes hin{from{opacity:0;translate:0 28px}to{opacity:1;translate:0 0}}
+  .hero-in>*{animation:hin .9s cubic-bezier(.2,.7,.2,1) both}
+  .hero-in>*:nth-child(2){animation-delay:.12s}
+  .hero-in>*:nth-child(3){animation-delay:.24s}
+  .hero-in>*:nth-child(4){animation-delay:.36s}
+  @keyframes hcue{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+  .cue-line{animation:hcue 2.2s ease-in-out infinite}
+  @supports (animation-timeline:view()){
+    @keyframes hz{to{scale:1.14;translate:0 5%}}
+    .hero-img{animation:hz linear both;animation-timeline:scroll(root);animation-range:0 100vh}
+  }
+}
+.hero-cta2{transition:background .2s,color .2s}
+.hero-cta2:hover{background:#f3ecdc;color:#1b1d23!important}
+
 .thumbs button{transition:opacity .2s}
 .thumbs button:hover{opacity:1!important}
 .mainph{transition:transform .8s cubic-bezier(.2,.7,.2,1)}
@@ -35,9 +52,6 @@ article{min-width:0}
 .spec-row{display:grid;grid-template-columns:minmax(150px,36%) 1fr;gap:12px;padding:11px 0;border-bottom:1px solid #d6cfbd}
 .spec-row:first-child{border-top:1px solid #1b1d23}
 html{scroll-behavior:auto}
-#top{min-height:min(88svh,820px)}
-#top>div{width:100%}
-.tilt{transition:transform .25s ease-out;will-change:transform}
 .marq{background:#1b1d23;color:#f3ecdc;overflow:hidden;white-space:nowrap;padding:14px 0;border-bottom:3px solid #e9752b}
 .marq-track{display:inline-flex;will-change:transform}
 .marq-track span{font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:900;font-size:clamp(20px,2.4vw,28px);letter-spacing:.2em;padding-right:.2em}
@@ -53,10 +67,6 @@ html{scroll-behavior:auto}
   @supports (animation-timeline:view()){
     @keyframes rv{from{opacity:0;translate:0 40px}to{opacity:1;translate:0 0}}
     .rv,#catalogo article{animation:rv linear both;animation-timeline:view();animation-range:entry 0% entry 42%}
-    @keyframes kpar{to{translate:0 140px}}
-    .kanji{animation:kpar linear both;animation-timeline:scroll(root);animation-range:0 100vh}
-    @keyframes ipar{to{translate:0 -36px}}
-    .par{animation:ipar linear both;animation-timeline:scroll(root);animation-range:0 100vh}
     @keyframes ukpar{from{translate:0 -60px}to{translate:0 60px}}
     .usa-kanji{animation:ukpar linear both;animation-timeline:view();animation-range:cover}
     @keyframes prog{to{transform:scaleX(1)}}
@@ -77,8 +87,20 @@ html{scroll-behavior:auto}
     .d2{offset-path:path('M70 170 C190 170 250 270 380 270')}
   }
 }
+@media (max-width:1000px){
+  #top{justify-content:flex-start!important}
+  .hero-media{position:relative!important;width:100%!important;order:2;margin-top:-4vw}
+  .hero-content{padding-top:56px!important;padding-bottom:0!important;order:1}
+  .hero-in{max-width:none!important}
+  .vtext,.cue{display:none!important}
+}
 @media (max-width:720px){
-  #top{min-height:0}
+  .vtext{display:none!important}
+  #top{justify-content:flex-start!important}
+  .hero-media{position:relative!important;width:100%!important;order:2;margin-top:-4vw}
+  .hero-content{padding-top:48px!important;padding-bottom:0!important;order:1}
+  .hero-in{max-width:none!important}
+  .cue{display:none!important}
   .usa-kanji{display:none}
   #usa a[href="#encargo"]{padding:15px 18px!important;font-size:18px!important;letter-spacing:.03em!important;white-space:nowrap}
 }
@@ -135,36 +157,27 @@ a,button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
   <div class="progress" aria-hidden="true"></div>
 </header>
 
-<section id="top" style="position:relative;overflow:hidden;background:linear-gradient(180deg,#8e939c 0%,#c4c7cc 52%,#eeeeec 78%,#f8f7f3 100%);padding:clamp(40px,6vw,88px) clamp(16px,4vw,56px) clamp(48px,6vw,80px);display:flex;align-items:center">
-  <div class="kanji" aria-hidden="true" style="position:absolute;right:-1%;bottom:-4%;font-family:'Shippori Mincho',serif;font-weight:800;font-size:clamp(150px,30vw,460px);line-height:1;color:rgba(27,29,35,.05);pointer-events:none;user-select:none;white-space:nowrap">ランクル</div>
-  <div style="position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:clamp(32px,5vw,72px);align-items:center;max-width:1400px;margin:0 auto">
-    <div style="display:flex;flex-direction:column;gap:26px">
-      <div class="eyebrow" style="display:flex;align-items:center;gap:14px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:14px;letter-spacing:.3em;color:#1b1d23">
-        <span style="width:40px;height:1px;background:#1b1d23"></span>DIRECTO DE JAPÓN · COLOMBIA Y EE.&nbsp;UU.
+<section id="top" style="position:relative;overflow:hidden;background:radial-gradient(60% 70% at 72% 55%,rgba(196,140,178,.28),rgba(20,22,28,0) 70%),#14161c;color:#f3ecdc;min-height:min(94svh,920px);display:flex;flex-direction:column;justify-content:center">
+  <div class="hero-media" style="position:absolute;right:0;bottom:0;width:min(70%,1300px);aspect-ratio:1862/1226;overflow:hidden">
+    <img class="hero-img" src="autos/hero.jpg" alt="Toyota Land Cruiser serie 70 blanco al atardecer" fetchpriority="high" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
+    <div aria-hidden="true" style="position:absolute;inset:0;background:linear-gradient(90deg,#14161c 0%,rgba(20,22,28,.7) 18%,rgba(20,22,28,0) 44%),linear-gradient(180deg,#14161c 0%,#14161c 6%,rgba(20,22,28,.6) 18%,rgba(20,22,28,0) 40%),linear-gradient(0deg,rgba(20,22,28,.9) 0%,rgba(20,22,28,0) 24%)"></div>
+  </div>
+  <div class="vtext" aria-hidden="true" style="position:absolute;left:clamp(10px,1.6vw,26px);top:50%;transform:translateY(-50%);writing-mode:vertical-rl;font-family:'Shippori Mincho',serif;font-weight:800;font-size:clamp(16px,1.7vw,24px);letter-spacing:.6em;color:rgba(243,236,220,.75)">日本の名車</div>
+  <div class="hero-content" style="position:relative;z-index:2;width:100%;max-width:1400px;margin:0 auto;padding:clamp(72px,12vh,140px) clamp(16px,4vw,56px)">
+    <div class="hero-in" style="display:flex;flex-direction:column;gap:clamp(16px,2vw,26px);align-items:flex-start;max-width:540px">
+      <div class="eyebrow" style="display:flex;align-items:center;gap:14px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:14px;letter-spacing:.3em;color:#f3ecdc;text-transform:uppercase">
+        <span style="width:40px;height:1px;background:#f3ecdc;flex-shrink:0"></span>Directo de Japón · Colombia y EE.&nbsp;UU.
       </div>
-      <h1 style="margin:0;font-family:'Shippori Mincho',serif;font-weight:800;font-size:clamp(44px,5.6vw,84px);line-height:1.05;color:#e9752b;letter-spacing:-.01em;text-wrap:balance">Clásicos de Japón</h1>
-      <div style="display:flex;flex-direction:column;gap:6px">
-        <span style="font-family:'Yellowtail',cursive;font-size:clamp(34px,4vw,54px);line-height:1;color:#2b5f8a">Leyendas que no envejecen</span>
-      </div>
-      <div class="cta-row" style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
-        <a href="#catalogo" style="background:#e9752b;color:#1b1d23;padding:15px 28px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-style:italic;font-size:20px;letter-spacing:.06em;text-transform:uppercase" style-hover="background:#1b1d23;color:#f3ecdc">Ver el catálogo</a>
-        <a href="#encargo" style="padding:15px 6px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:18px;letter-spacing:.1em;text-transform:uppercase;border-bottom:2px solid #1b1d23">Encargar uno a medida →</a>
+      <h1 style="margin:0;font-family:'Shippori Mincho',serif;font-weight:800;font-size:clamp(56px,7.4vw,124px);line-height:.96;color:#e9752b;letter-spacing:-.015em">Clásicos<br>de Japón</h1>
+      <span style="font-family:'Yellowtail',cursive;font-size:clamp(36px,3.3vw,56px);line-height:1;color:#a9d4ec">Leyendas que no envejecen</span>
+      <div class="cta-row" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:8px">
+        <a href="#catalogo" style="background:#e9752b;color:#1b1d23;padding:16px 30px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-style:italic;font-size:20px;letter-spacing:.06em;text-transform:uppercase" style-hover="background:#f3ecdc;color:#1b1d23">Ver el catálogo</a>
+        <a class="hero-cta2" href="#encargo" style="padding:15px 26px;border:1px solid rgba(243,236,220,.7);color:#f3ecdc;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:18px;letter-spacing:.1em;text-transform:uppercase">Encargar uno a medida →</a>
       </div>
     </div>
-    <div class="par" style="position:relative;display:flex;flex-direction:column;gap:10px">
-      <div class="tilt" style="background:#f3ecdc;padding:14px 14px 18px;box-shadow:0 30px 60px -20px rgba(27,29,35,.45)">
-        <img src="ref/bj74-0.jpg" alt="Catálogo Toyota Land Cruiser BJ74, 1988" style="display:block;width:100%;height:auto">
-      </div>
-      <div style="display:flex;justify-content:space-between;gap:12px;font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:.12em;color:#3a3e48">
-        <span>LAND CRUISER BJ74 · 特別仕様車 · 1988</span><span>1–2</span>
-      </div>
-      <sc-if value="{{ showBadge }}" hint-placeholder-val="{{ true }}">
-        <div class="badge" style="position:absolute;left:-18px;bottom:52px;background:#a9d4ec;color:#1b1d23;padding:14px 20px;transform:rotate(-4deg);box-shadow:0 10px 24px -10px rgba(0,0,0,.4);display:flex;flex-direction:column;gap:2px">
-          <span style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:14px;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap">Directo de Japón</span>
-          <span style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-style:italic;font-size:22px;line-height:1.05;white-space:nowrap">312 UNIDADES ENTREGADAS</span>
-        </div>
-      </sc-if>
-    </div>
+  </div>
+  <div class="cue" aria-hidden="true" style="position:absolute;right:clamp(16px,3vw,44px);bottom:clamp(24px,3vw,44px);z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:#f3ecdc;writing-mode:vertical-rl">
+    <span>Desliza</span><span class="cue-line" style="display:block;width:1px;height:56px;background:#f3ecdc"></span>
   </div>
 </section>
 
@@ -400,21 +413,6 @@ a,button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 </sc-if>
 
 </x-dc>
-<script>
-(function(){
-  if(matchMedia('(prefers-reduced-motion:reduce)').matches||!matchMedia('(hover:hover)').matches)return;
-  var last=null;
-  document.addEventListener('pointermove',function(e){
-    var hero=document.getElementById('top');if(!hero)return;
-    var el=hero.querySelector('.tilt');if(!el)return;
-    var r=hero.getBoundingClientRect();
-    if(e.clientY<r.top||e.clientY>r.bottom){if(last){el.style.transform='';last=null}return}
-    var x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
-    el.style.transform='perspective(900px) rotateY('+(x*9).toFixed(2)+'deg) rotateX('+(-y*7).toFixed(2)+'deg)';
-    last=1;
-  },{passive:true});
-})();
-</script>
 <script>
 document.addEventListener('keydown',function(e){
   var q=function(a){var b=document.querySelector(a);if(b)b.click()};
