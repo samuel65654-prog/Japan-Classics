@@ -358,7 +358,7 @@ a,button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
           </label>
           <label style="display:flex;flex-direction:column;gap:6px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:14px;letter-spacing:.14em;text-transform:uppercase">Modelo
             <select style="border:none;border-bottom:1px solid #1b1d23;padding:10px 0;font-size:16px;background:transparent">
-              <option>Land Cruiser 60</option><option>Land Cruiser 70</option><option>Land Cruiser Prado 78</option><option>Land Cruiser 80</option><option>Hilux Surf</option><option>Mitsubishi Pajero</option><option>Otro</option>
+              <sc-for list="{{ modelOptions }}" as="mo" hint-placeholder-count="4"><option>{{ mo.label }}</option></sc-for>
             </select>
           </label>
           <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px">
@@ -569,6 +569,7 @@ class Component extends DCLogic {
     }
     return {
       cars, filters,
+      modelOptions: this.cars.map(c => ({ label: c.name })),
       hasFilters: models.length > 2, noCars: this.cars.length === 0,
       showBadge: this.props.showBadge ?? true,
       sent, notSent: !sent,
