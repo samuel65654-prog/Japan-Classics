@@ -24,14 +24,20 @@ img{max-width:100%}
 section[id]{scroll-margin-top:84px}
 image-slot{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;aspect-ratio:auto!important}
 article{min-width:0}
+.thumbs button{transition:opacity .2s}
+.thumbs button:hover{opacity:1!important}
+.mainph{transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.mainwrap:hover .mainph{transform:scale(1.03)}
+#catalogo article{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+@media (min-width:901px){.gal{position:sticky;top:96px;align-self:start}}
+@media (max-width:900px){#catalogo article{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:520px){.spec-row{grid-template-columns:1fr!important;gap:3px!important}}
+.spec-row{display:grid;grid-template-columns:minmax(150px,36%) 1fr;gap:12px;padding:11px 0;border-bottom:1px solid #d6cfbd}
+.spec-row:first-child{border-top:1px solid #1b1d23}
 html{scroll-behavior:auto}
 #top{min-height:min(88svh,820px)}
 #top>div{width:100%}
 .tilt{transition:transform .25s ease-out;will-change:transform}
-#catalogo article{transition:transform .35s ease,box-shadow .35s ease}
-#catalogo article:hover{transform:translateY(-6px)}
-#catalogo article image-slot{transition:transform .8s cubic-bezier(.2,.7,.2,1)}
-#catalogo article:hover image-slot{transform:scale(1.05)}
 .marq{background:#1b1d23;color:#f3ecdc;overflow:hidden;white-space:nowrap;padding:14px 0;border-bottom:3px solid #e9752b}
 .marq-track{display:inline-flex;will-change:transform}
 .marq-track span{font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:900;font-size:clamp(20px,2.4vw,28px);letter-spacing:.2em;padding-right:.2em}
@@ -95,9 +101,6 @@ a,button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
   .badge span:last-child{font-size:17px!important}
   .filters{width:100%}
   .filters button{flex:1;padding:11px 10px!important;font-size:14px!important}
-  .specs span:last-child{font-size:16px!important}
-  .specs span:first-child{font-size:10px!important}
-  .card-body{padding:18px 16px 20px!important}
   .fig2{margin-top:28px!important}
   .footer-links a{padding:6px 0;display:block}
 }
@@ -201,31 +204,46 @@ a,button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
       </div>
     </sc-if>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,380px),1fr));gap:clamp(20px,2.5vw,36px)">
-      <sc-for list="{{ cars }}" as="car" hint-placeholder-count="6">
-        <article style="background:#fbf8f1;display:flex;flex-direction:column;box-shadow:0 1px 0 #1b1d23" style-hover="box-shadow:0 24px 48px -24px rgba(27,29,35,.5)">
-          <div style="position:relative;overflow:hidden;aspect-ratio:4/3;background:linear-gradient(180deg,#8e939c,#d7d9dc 60%,#f4f3ef)">
-            <image-slot id="{{ car.slot }}" shape="rect" placeholder="{{ car.ph }}"></image-slot>
-            <span style="position:absolute;right:0;top:16px;background:{{ car.statusBg }};color:#1b1d23;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-style:italic;font-size:14px;letter-spacing:.1em;padding:5px 14px 5px 18px;white-space:nowrap;clip-path:polygon(10px 0,100% 0,100% 100%,0 100%);pointer-events:none">{{ car.status }}</span>
+    <div style="display:flex;flex-direction:column;gap:clamp(28px,4vw,56px)">
+      <sc-for list="{{ cars }}" as="car" hint-placeholder-count="1">
+        <article style="background:#fbf8f1;box-shadow:0 1px 0 #1b1d23;display:grid">
+          <div style="grid-column:1/-1;display:flex;flex-direction:column;gap:3px"><div style="height:4px;background:#e9752b"></div><div style="height:2px;background:#a9d4ec"></div></div>
+          <div class="gal" style="padding:clamp(14px,2vw,28px);display:flex;flex-direction:column;gap:10px;min-width:0">
+            <div class="mainwrap" onClick="{{ car.openLb }}" style="position:relative;background:#fff;aspect-ratio:16/10;overflow:hidden;cursor:zoom-in">
+              <img class="mainph" src="{{ car.main }}" alt="{{ car.mainAlt }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
+              <sc-if value="{{ car.hasStatus }}" hint-placeholder-val="{{ false }}">
+                <span style="position:absolute;right:0;top:16px;background:{{ car.statusBg }};color:#1b1d23;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-style:italic;font-size:14px;letter-spacing:.1em;padding:5px 14px 5px 18px;white-space:nowrap;clip-path:polygon(10px 0,100% 0,100% 100%,0 100%);pointer-events:none">{{ car.status }}</span>
+              </sc-if>
+              <span style="position:absolute;left:10px;bottom:10px;background:rgba(27,29,35,.82);color:#f3ecdc;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:13px;letter-spacing:.14em;padding:5px 10px;pointer-events:none">{{ car.count }} · AMPLIAR</span>
+            </div>
+            <div class="thumbs" style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px">
+              <sc-for list="{{ car.thumbs }}" as="t" hint-placeholder-count="6">
+                <button onClick="{{ t.onClick }}" aria-label="{{ t.alt }}" style="padding:0;border:0;cursor:pointer;aspect-ratio:4/3;overflow:hidden;background:#fff;outline:{{ t.outline }};outline-offset:-2px;opacity:{{ t.op }}"><img src="{{ t.src }}" alt="{{ t.alt }}" loading="lazy" style="display:block;width:100%;height:100%;object-fit:cover"></button>
+              </sc-for>
+            </div>
           </div>
-          <div style="display:flex;flex-direction:column;gap:3px">
-            <div style="height:4px;background:#e9752b"></div><div style="height:2px;background:#a9d4ec"></div>
-          </div>
-          <div class="card-body" style="padding:22px 22px 24px;display:flex;flex-direction:column;gap:16px">
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
-              <div style="display:flex;flex-direction:column;gap:6px;flex:1;min-width:0">
-                <span style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:14px;letter-spacing:.18em;color:#5a5f6b">{{ car.code }} · {{ car.year }}</span>
-                <h3 style="margin:0;font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:900;font-size:clamp(30px,2.6vw,38px);line-height:1.02;text-transform:uppercase;text-wrap:balance">{{ car.name }}</h3>
+          <div style="padding:clamp(20px,3vw,44px);display:flex;flex-direction:column;gap:22px;min-width:0">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+                <span style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:14px;letter-spacing:.18em;color:#5a5f6b;text-transform:uppercase">{{ car.tag }}</span>
+                <span style="font-family:'Shippori Mincho',serif;font-size:14px;color:#5a5f6b;white-space:nowrap">{{ car.jp }}</span>
               </div>
-              <span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;color:#5a5f6b;letter-spacing:.1em;flex-shrink:0">{{ car.page }}</span>
+              <h3 style="margin:0;font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:900;font-size:clamp(38px,4.2vw,58px);line-height:.98;text-transform:uppercase;text-wrap:balance">{{ car.name }}</h3>
             </div>
-            <div class="specs" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid #1b1d23;border-bottom:1px solid #1b1d23">
-              <div style="padding:10px 0;display:flex;flex-direction:column;gap:2px"><span style="font-family:'Shippori Mincho',serif;font-size:11px;color:#5a5f6b">エンジン · Motor</span><span style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px">{{ car.engine }}</span></div>
-              <div style="padding:10px 0 10px 12px;border-left:1px solid #c9c2b0;display:flex;flex-direction:column;gap:2px"><span style="font-family:'Shippori Mincho',serif;font-size:11px;color:#5a5f6b">走行 · Km</span><span style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px">{{ car.km }}</span></div>
-              <div style="padding:10px 0 10px 12px;border-left:1px solid #c9c2b0;display:flex;flex-direction:column;gap:2px"><span style="font-family:'Shippori Mincho',serif;font-size:11px;color:#5a5f6b">変速 · Caja</span><span style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px">{{ car.trans }}</span></div>
+            <div style="display:flex;flex-direction:column">
+              <span style="font-family:'Shippori Mincho',serif;font-weight:700;font-size:14px;letter-spacing:.28em;color:#e9752b;text-transform:uppercase;padding-bottom:10px">Ficha técnica · 仕様</span>
+              <sc-for list="{{ car.specs }}" as="sp" hint-placeholder-count="5">
+                <div class="spec-row"><span style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:#5a5f6b">{{ sp.k }}</span><span style="font-size:16px;line-height:1.4;font-weight:500">{{ sp.v }}</span></div>
+              </sc-for>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
-              <a href="#encargo" style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:16px;letter-spacing:.12em;text-transform:uppercase;border-bottom:2px solid #e9752b;padding-bottom:2px">Consultar disponibilidad →</a>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <span style="font-family:'Shippori Mincho',serif;font-weight:700;font-size:14px;letter-spacing:.28em;color:#e9752b;text-transform:uppercase">Para destacar</span>
+              <sc-for list="{{ car.highlights }}" as="hl" hint-placeholder-count="5">
+                <span style="display:grid;grid-template-columns:18px 1fr;font-size:16px;line-height:1.5;color:#2a2d35"><span style="color:#e9752b">●</span><span>{{ hl.t }}</span></span>
+              </sc-for>
+            </div>
+            <div style="padding-top:4px">
+              <a href="#encargo" style="display:inline-block;background:#e9752b;color:#1b1d23;padding:15px 28px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-style:italic;font-size:20px;letter-spacing:.06em;text-transform:uppercase" style-hover="background:#1b1d23;color:#f3ecdc">Consultar disponibilidad →</a>
             </div>
           </div>
         </article>
@@ -371,6 +389,16 @@ a,button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
   </div>
 </footer>
 
+<sc-if value="{{ lbOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ lbClose }}" style="position:fixed;inset:0;z-index:100;background:rgba(12,14,18,.95);display:flex;align-items:center;justify-content:center;padding:56px 12px 48px">
+    <img onClick="{{ lbStop }}" src="{{ lbSrc }}" alt="{{ lbAlt }}" style="max-width:100%;max-height:100%;object-fit:contain;display:block;box-shadow:0 30px 80px rgba(0,0,0,.6)">
+    <button data-lb-close onClick="{{ lbClose }}" aria-label="Cerrar" style="position:absolute;top:12px;right:12px;width:44px;height:44px;border:1px solid rgba(243,236,220,.4);background:rgba(12,14,18,.6);color:#f3ecdc;font-size:22px;cursor:pointer">✕</button>
+    <button data-lb-prev onClick="{{ lbPrev }}" aria-label="Foto anterior" style="position:absolute;left:10px;top:50%;margin-top:-22px;width:44px;height:44px;border:1px solid rgba(243,236,220,.4);background:rgba(12,14,18,.6);color:#f3ecdc;font-size:22px;cursor:pointer">‹</button>
+    <button data-lb-next onClick="{{ lbNext }}" aria-label="Foto siguiente" style="position:absolute;right:10px;top:50%;margin-top:-22px;width:44px;height:44px;border:1px solid rgba(243,236,220,.4);background:rgba(12,14,18,.6);color:#f3ecdc;font-size:22px;cursor:pointer">›</button>
+    <span style="position:absolute;left:0;right:0;bottom:14px;text-align:center;font-family:'Barlow Condensed',sans-serif;letter-spacing:.2em;font-size:14px;color:#f3ecdc">{{ lbCount }}</span>
+  </div>
+</sc-if>
+
 </x-dc>
 <script>
 (function(){
@@ -387,31 +415,91 @@ a,button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
   },{passive:true});
 })();
 </script>
+<script>
+document.addEventListener('keydown',function(e){
+  var q=function(a){var b=document.querySelector(a);if(b)b.click()};
+  if(e.key==='Escape')q('[data-lb-close]');
+  else if(e.key==='ArrowLeft')q('[data-lb-prev]');
+  else if(e.key==='ArrowRight')q('[data-lb-next]');
+});
+</script>
 <script type="text/x-dc" data-dc-script data-props="{&quot;showBadge&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
 class Component extends DCLogic {
-  state = { filter: 'Todos', usd: false, sent: false };
-  // Aquí se agregan las unidades, una por una. Ejemplo de formato:
-  // { name: 'Land Cruiser 80', code: 'HDJ81V', year: 1994, engine: '1HD-T 4.2', km: '204.000', trans: 'Auto', status: 'EN BOGOTÁ', model: 'Land Cruiser' }
-  cars = [];
+  state = { filter: 'Todos', sent: false, sel: {}, lb: null };
+  // Aquí se agregan las unidades, una por una (fotos en autos/<codigo>/).
+  cars = [
+    {
+      code: 'bj74', model: 'Land Cruiser', status: '',
+      name: 'Toyota Land Cruiser BJ74', tag: 'Serie 70 · 4x4 diésel', jp: 'ランクル70',
+      photos: [
+        { src: 'autos/bj74/01-frente-tres-cuartos.jpg', thumb: 'autos/bj74/t-01-frente-tres-cuartos.jpg', alt: 'Land Cruiser BJ74, vista frontal en tres cuartos' },
+        { src: 'autos/bj74/02-frente.jpg', thumb: 'autos/bj74/t-02-frente.jpg', alt: 'Land Cruiser BJ74, frente' },
+        { src: 'autos/bj74/03-trasera.jpg', thumb: 'autos/bj74/t-03-trasera.jpg', alt: 'Land Cruiser BJ74, parte trasera con llanta de repuesto' },
+        { src: 'autos/bj74/04-asiento.jpg', thumb: 'autos/bj74/t-04-asiento.jpg', alt: 'Land Cruiser BJ74, asientos delanteros turbo' },
+        { src: 'autos/bj74/05-motor.jpg', thumb: 'autos/bj74/t-05-motor.jpg', alt: 'Land Cruiser BJ74, motor turbodiésel' },
+        { src: 'autos/bj74/06-cabina.jpg', thumb: 'autos/bj74/t-06-cabina.jpg', alt: 'Land Cruiser BJ74, tablero y cabina' },
+      ],
+      specs: [
+        ['Marca', 'Toyota'],
+        ['Modelo', 'Land Cruiser BJ74 (serie 70)'],
+        ['Motor', '13B, 3.4 L, 4 cilindros turbodiésel. Mecánico y de bajo mantenimiento'],
+        ['Transmisión', 'Manual de 5 velocidades'],
+        ['Caja de transferencia', 'Baja y alta'],
+        ['Tracción', '4x4 de uso selectivo'],
+      ],
+      highlights: [
+        'Una de las 4x4 más resistentes y confiables del mundo, hecha para trabajo duro y terreno difícil.',
+        'Diseño clásico de la serie 70, cada vez más buscado por coleccionistas y entusiastas del todoterreno.',
+        'Mecánica simple y fácil de reparar, con repuestos disponibles.',
+        'Gran capacidad de carga y remolque, ideal para finca, expediciones o proyecto de restauración.',
+        'Chasis robusto y ejes rígidos, con buena altura al piso.',
+      ],
+    },
+  ];
   renderVals() {
-    const { filter, usd, sent } = this.state;
+    const { filter, sent } = this.state;
+    const sel = this.state.sel || {};
+    const lb = this.state.lb;
     const statusBg = { 'EN BOGOTÁ': '#a9d4ec', 'EN TRÁNSITO': '#e9752b', 'EN JAPÓN': '#f3ecdc' };
-    const cars = this.cars.filter(c => filter === 'Todos' || c.model === filter).map((c, i) => ({
-      ...c, page: (i * 2 + 1) + '–' + (i * 2 + 2), statusBg: statusBg[c.status],
-      slot: 'jc-' + c.code.toLowerCase(), ph: 'Foto — ' + c.name + ' ' + c.year,
-    }));
+    const cars = this.cars.filter(c => filter === 'Todos' || c.model === filter).map(c => {
+      const i = sel[c.code] || 0, p = c.photos[i];
+      return {
+        ...c,
+        main: p.src, mainAlt: p.alt, hasStatus: !!c.status, statusBg: statusBg[c.status] || '#f3ecdc',
+        count: (i + 1) + ' / ' + c.photos.length,
+        thumbs: c.photos.map((ph, k) => ({
+          src: ph.thumb, alt: ph.alt, outline: k === i ? '2px solid #e9752b' : 'none', op: k === i ? 1 : 0.6,
+          onClick: () => this.setState({ sel: { ...(this.state.sel || {}), [c.code]: k } }),
+        })),
+        specs: c.specs.map(([k, v]) => ({ k, v })),
+        highlights: c.highlights.map(t => ({ t })),
+        openLb: () => this.setState({ lb: { code: c.code, i } }),
+      };
+    });
     const models = ['Todos', ...new Set(this.cars.map(c => c.model))];
     const filters = models.map(label => ({
       label, bg: label === filter ? '#1b1d23' : 'transparent', fg: label === filter ? '#f3ecdc' : '#1b1d23',
       onClick: () => this.setState({ filter: label }),
     }));
+    let lbv = { lbOpen: false, lbSrc: '', lbAlt: '', lbCount: '' };
+    const stop = e => { if (e && e.stopPropagation) e.stopPropagation(); };
+    const lbc = lb && this.cars.find(x => x.code === lb.code);
+    if (lbc) {
+      const n = lbc.photos.length, ph = lbc.photos[lb.i];
+      lbv = { lbOpen: true, lbSrc: ph.src, lbAlt: ph.alt, lbCount: (lb.i + 1) + ' / ' + n };
+      lbv.lbPrev = e => { stop(e); this.setState({ lb: { code: lbc.code, i: (lb.i - 1 + n) % n } }); };
+      lbv.lbNext = e => { stop(e); this.setState({ lb: { code: lbc.code, i: (lb.i + 1) % n } }); };
+    }
     return {
       cars, filters,
-      hasFilters: this.cars.length > 1, noCars: this.cars.length === 0,
+      hasFilters: models.length > 2, noCars: this.cars.length === 0,
       showBadge: this.props.showBadge ?? true,
       sent, notSent: !sent,
       submit: e => { e.preventDefault(); this.setState({ sent: true }); },
       reset: () => this.setState({ sent: false }),
+      lbPrev: () => {}, lbNext: () => {}, lbStop: stop,
+      lbClose: () => this.setState({ lb: null }),
+      ...lbv,
     };
   }
 }
